@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MenuManager : MonoBehaviour {
-    public static MenuManager Instance;
+    public static MenuManager Instance { get; private set; }
     [SerializeField] private Menu[] menus;
 
     private void Awake() {
