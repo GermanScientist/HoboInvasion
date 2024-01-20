@@ -7,6 +7,11 @@ public class Menu : MonoBehaviour {
     public string MenuName { get { return menuName; } }
 
     [SerializeField] private bool open;
+    public bool Open { get { return open; } }
+
+    private void Start() {
+        gameObject.SetActive(open);
+    }
 
     public void OpenCloseMenu() {
         gameObject.SetActive(!open);
