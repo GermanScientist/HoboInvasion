@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class Launcher : MonoBehaviourPunCallbacks {
     [SerializeField] private InputField inputRoomName;
+    [SerializeField] private Text roomNametext;
 
     private void Start() {
         PhotonNetwork.ConnectUsingSettings();
@@ -28,10 +29,22 @@ public class Launcher : MonoBehaviourPunCallbacks {
     // Succesfully created room
     public override void OnJoinedRoom() {
         Debug.Log("Succesfully created room");
+        MenuManager.Instance.OpenMenu("Room");
+        roomNametext.text = PhotonNetwork.CurrentRoom.Name;
     }
 
     // Failed to create room
     public override void OnCreateRoomFailed(short returnCode, string message) {
         Debug.Log(message);
+    }
+
+    public void LeaveRoom() {
+        Debug.Log($"Leaving {PhotonNetwork.CurrentRoom.Name}");
+        PhotonNetwork.LeaveRoom();
+        MenuManager.Instance.OpenMenu("Loading");
+    }
+
+    public override void OnLeftRoom() {
+        MenuManager.Instance.OpenMenu("Title");
     }
 }
