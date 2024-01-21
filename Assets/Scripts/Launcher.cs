@@ -3,10 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
+using Photon.Realtime;
 
 public class Launcher : MonoBehaviourPunCallbacks {
+    public static Launcher Instance { get; private set; }
     [SerializeField] private InputField inputRoomName;
     [SerializeField] private Text roomNametext;
+    [SerializeField] private Transform roomListContent;
+    [SerializeField] private GameObject roomListItemPrefab;
+
+    private void Awake() {
+        Instance = this;
+    }
 
     private void Start() {
         PhotonNetwork.ConnectUsingSettings();
@@ -18,6 +26,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
     public override void OnJoinedLobby() {
         Debug.Log("Joined lobby");
+        MenuManager.Instance.OpenMenu("Title");
     }
 
     public void CreateRoom() {
@@ -46,5 +55,18 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
     public override void OnLeftRoom() {
         MenuManager.Instance.OpenMenu("Title");
+    }
+
+    public void JoinRoom(RoomInfo info) {
+        PhotonNetwork.JoinRoom(info.Name);
+        MenuManager.Instance.OpenMenu("Loading");
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList) {
+        // Clear list before update
+        foreach (Transform trans in roomListContent) Destroy(trans.gameObject);
+        // Instanciate list prefab and call the setup function
+        for (int i = 0; i < roomList.Count; i++)
+            Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
     }
 }
