@@ -26,6 +26,7 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
     public override void OnConnectedToMaster() {
         PhotonNetwork.JoinLobby();
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     public override void OnJoinedLobby() {
@@ -82,5 +83,10 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
     public override void OnPlayerEnteredRoom(Player newPlayer) {
         Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(newPlayer);
+    }
+
+    public void StartGame() {
+        MenuManager.Instance.OpenMenu("Loading");
+        PhotonNetwork.LoadLevel(1);
     }
 }
