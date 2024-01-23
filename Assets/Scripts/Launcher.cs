@@ -16,6 +16,8 @@ public class Launcher : MonoBehaviourPunCallbacks {
     [SerializeField] private Transform playerListContent;
     [SerializeField] private GameObject playerListItemPrefab;
 
+    [SerializeField] private GameObject startGameButton;
+
     private void Awake() {
         Instance = this;
     }
@@ -49,8 +51,19 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
         Player[] players = PhotonNetwork.PlayerList;
 
+        // Destroy old player prefabs
+        foreach (Transform child in playerListContent)
+            Destroy(child.gameObject);
+
+        // Create new prefabs for current players
         for (int i = 0; i < players.Length; i++)
             Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(players[i]);
+
+        startGameButton.SetActive(PhotonNetwork.IsMasterClient);
+    }
+
+    public override void OnMasterClientSwitched(Player newMasterClient) {
+        startGameButton.SetActive(PhotonNetwork.IsMasterClient);
     }
 
     // Failed to create room
@@ -77,8 +90,11 @@ public class Launcher : MonoBehaviourPunCallbacks {
         // Clear list before update
         foreach (Transform trans in roomListContent) Destroy(trans.gameObject);
         // Instanciate list prefab and call the setup function
-        for (int i = 0; i < roomList.Count; i++)
+        for (int i = 0; i < roomList.Count; i++) {
+            if (roomList[i].RemovedFromList) continue;
             Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
+        }
+            
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) {
