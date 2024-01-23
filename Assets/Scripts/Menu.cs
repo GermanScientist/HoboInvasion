@@ -14,6 +14,7 @@ public class Menu : MonoBehaviour {
     }
 
     public void OpenCloseMenu() {
+        Debug.Log($"{gameObject.name} {open}");
         gameObject.SetActive(!open);
         open = !open;
     }
