@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class PlayerController : MonoBehaviour {
     [SerializeField] private GameObject camHolder;
@@ -12,17 +13,29 @@ public class PlayerController : MonoBehaviour {
     private bool grounded;
 
     private Rigidbody rb;
+    private PhotonView pv;
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
+        pv = GetComponent<PhotonView>();
+    }
+
+    private void Start() {
+        // Destroy camera gameobject to also remove audiolistener
+        if (!pv.IsMine) {
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+            Destroy(rb);
+        }
     }
 
     private void Update() {
+        if (!pv.IsMine) return;
         CameraControls();
         Jump();
     }
 
     private void FixedUpdate() {
+        if (!pv.IsMine) return;
         MoveControls();
     }
 

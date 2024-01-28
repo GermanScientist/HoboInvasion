@@ -9,6 +9,7 @@ public class GroundCheck : MonoBehaviour {
         playerController = GetComponentInParent<PlayerController>();
     }
 
+    // TODO: Change layer so it doesnt need to check collision with player every time
     private void OnTriggerEnter(Collider collision) {
         if (collision.gameObject == playerController.gameObject) return;
         playerController.SetGroundedState(true);
