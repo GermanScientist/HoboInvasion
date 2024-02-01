@@ -220,7 +220,7 @@ GameObject:
   - component: {fileID: 6811461490338732772}
   - component: {fileID: 713240296018636729}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Hobo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

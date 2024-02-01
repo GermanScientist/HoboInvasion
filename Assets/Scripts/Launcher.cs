@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using UnityEngine.UI;
 using Photon.Realtime;
+using UnityEngine.UI;
 
 public class Launcher : MonoBehaviourPunCallbacks {
     public static Launcher Instance { get; private set; }
@@ -94,7 +94,6 @@ public class Launcher : MonoBehaviourPunCallbacks {
             if (roomList[i].RemovedFromList) continue;
             Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
         }
-            
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) {

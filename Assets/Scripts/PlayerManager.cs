@@ -5,19 +5,26 @@ using Photon.Pun;
 using System.IO;
 
 public class PlayerManager : MonoBehaviour {
-    private PhotonView view;
+    public PhotonView View { get; private set; }
+    public enum Role {
+        Hobo,
+        RichGuy
+    }
+    public Role role;
 
     private void Awake() {
-        view = GetComponent<PhotonView>();
+        View = GetComponent<PhotonView>();
+        Debug.Log($"View {View.name}");
     }
 
     private void Start() {
         // Is true when photon view is owned by the local player
-        if (view.IsMine) CreatePlayer();
+        if (View.IsMine) CreatePlayer();
     }
 
     private void CreatePlayer() {
         // Instantiate player
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Player"), Vector3.zero, Quaternion.identity);
+        if (role == Role.Hobo) PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Hobo"), Vector3.zero, Quaternion.identity);
+        else if (role == Role.RichGuy) PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "RichGuy"), Vector3.zero, Quaternion.identity);
     }
 }
