@@ -18,12 +18,16 @@ public class Launcher : MonoBehaviourPunCallbacks {
 
     [SerializeField] private GameObject startGameButton;
 
+    [SerializeField] private GameObject errorField;
+    [SerializeField] private Text errorMessage;
+
     private void Awake() {
         Instance = this;
     }
 
     private void Start() {
         PhotonNetwork.ConnectUsingSettings();
+        errorField.SetActive(false);
     }
 
     public override void OnConnectedToMaster() {
@@ -69,6 +73,8 @@ public class Launcher : MonoBehaviourPunCallbacks {
     // Failed to create room
     public override void OnCreateRoomFailed(short returnCode, string message) {
         Debug.Log(message);
+        errorMessage.text = message;
+        errorField.SetActive(true);
     }
 
     public void LeaveRoom() {
